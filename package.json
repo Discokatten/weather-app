@@ -6,14 +6,15 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "server": "python src/server/server.py"
   },
   "dependencies": {
     "@bybas/weather-icons": "^2.0.0",
-    "express": "^5.2.1",
     "lucide-react": "^0.545.0",
     "next": "^16.2.6",
     "openmeteo": "^1.2.3",
+    "post-they": "^0.2.0",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
