@@ -1,4 +1,5 @@
-// @weather/default.js
+import Loading from "./loading";
+
 export default function DefaultWeather() {
-  return null // Or return a loading/fallback component
+  return <Loading/>
 }

@@ -1,3 +1,5 @@
+import Loading from "./loading";
+
 export default function DefaultClothes() {
-  return null // Or return a loading/fallback component
+  return <Loading/>
 }

@@ -44,10 +44,10 @@ jobs:
         # start the web server (without hanging the terminal)
         # note nohup does NOT work with the npm command,
         # so run using the node command instead
-      - run: nohup npm run backend &
+      - run: nohup npm run server &
         # run whatever is specified in package.json
         # for the script test
       # - run:
-      #     npm run test:api #based on post-they, waiting for vulnerability-fixes
+      #     npm run test:api #TODO based on post-they, waiting for vulnerability-fixes
 
       - run: npm audit --omit=dev --audit-level=high
