@@ -28,11 +28,11 @@ jobs:
     steps:
       # action from github marketplace, actions
       # checkout this repo on the server
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         # action from github marketplace, actions
         # install Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -40,17 +40,23 @@ jobs:
         # of npm install -> installs all npm modules
         # mentioned in package.json, preferably during CI
       - run: npm ci
-        # start the web server (without hanging the terminal)
-        # note nohup does NOT work with the npm command,
-        # so run using the node command instead
+      - run: npm run seed
+        # start the web server in the background
+        # nohup prevents the process from stopping if the terminal closes
       - run: nohup npm run server &
-        # run whatever is specified in package.json
-        # for the script test
-      # - run:
-      #     npm run test:api
+        # poll until the server responds before continuing
+        # retries every 2 seconds up to 15 times (30 seconds max)
+        # replace localhost:3000 with your actual port/endpoint
+      - name: Wait for server to be ready
+        run: |
+          for i in {1..15}; do
+            curl -s http://localhost:3000 && break
+            echo "Waiting... ($i)"
+            sleep 2
+          done
+
       - run: npm audit --omit=dev --audit-level=high
 
-      # - uses: actions/checkout@v4
       - name: Install Postman CLI
         run: |
           curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
@@ -59,15 +65,3 @@ jobs:
       - name: Run API tests
         run: |
           postman collection run "20428110-67f8120e-b505-47f7-a83f-d6daaf2c7b1d"
-  # automated-api-tests:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Install Postman CLI
-  #       run: |
-  #         curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-  #     - name: Login to Postman CLI
-  #       run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
-  #     - name: Run API tests
-  #       run: |
-  #         postman collection run "20428110-67f8120e-b505-47f7-a83f-d6daaf2c7b1d"
