@@ -4,10 +4,7 @@
     "type": "hat",
     "layer": "hat",
     "warmth": 2,
-    "season": [
-      "autumn",
-      "spring"
-    ],
+    "season": ["autumn", "spring"],
     "weather": [],
     "id": 1
   },
@@ -16,12 +13,8 @@
     "type": "hat",
     "layer": "hat",
     "warmth": 3,
-    "season": [
-      "winter"
-    ],
-    "weather": [
-      "snow"
-    ],
+    "season": ["winter"],
+    "weather": ["snow"],
     "id": 2
   },
   {
@@ -29,9 +22,7 @@
     "type": "shoe",
     "layer": "shoe",
     "warmth": 0,
-    "season": [
-      "summer"
-    ],
+    "season": ["summer"],
     "weather": [],
     "id": 3
   },
@@ -40,14 +31,8 @@
     "type": "shoe",
     "layer": "shoe",
     "warmth": 1,
-    "season": [
-      "autumn",
-      "spring",
-      "summer"
-    ],
-    "weather": [
-      "rain"
-    ],
+    "season": ["autumn", "spring", "summer"],
+    "weather": ["rain"],
     "id": 4
   },
   {
@@ -55,10 +40,7 @@
     "type": "shoe",
     "layer": "shoe",
     "warmth": 1,
-    "season": [
-      "autumn",
-      "spring"
-    ],
+    "season": ["autumn", "spring"],
     "weather": [],
     "id": 5
   },
@@ -67,12 +49,8 @@
     "type": "shoe",
     "layer": "shoe",
     "warmth": 3,
-    "season": [
-      "winter"
-    ],
-    "weather": [
-      "snow"
-    ],
+    "season": ["winter"],
+    "weather": ["snow"],
     "id": 6
   },
   {
@@ -81,9 +59,7 @@
     "layer": "shell",
     "warmth": 1,
     "weather": [],
-    "season": [
-      "summer"
-    ],
+    "season": ["summer"],
     "id": 7
   },
   {
@@ -91,14 +67,8 @@
     "type": "jacket",
     "layer": "shell",
     "warmth": 2,
-    "season": [
-      "autumn",
-      "spring",
-      "summer"
-    ],
-    "weather": [
-      "rain"
-    ],
+    "season": ["autumn", "spring", "summer"],
+    "weather": ["rain"],
     "id": 8
   },
   {
@@ -106,12 +76,9 @@
     "type": "jacket",
     "layer": "shell",
     "warmth": 4,
-    "season": [
-      "winter"
-    ],
-    "weather": [
-      "snow"
-    ],
+    "size": "s",
+    "season": ["winter"],
+    "weather": ["snow"],
     "id": 9
   },
   {
@@ -119,10 +86,7 @@
     "type": "jacket",
     "layer": "shell",
     "warmth": 3,
-    "season": [
-      "autumn",
-      "spring"
-    ],
+    "season": ["autumn", "spring"],
     "weather": [],
     "id": 10
   },
@@ -131,10 +95,7 @@
     "type": "jacket",
     "layer": "mid",
     "warmth": 2,
-    "season": [
-      "autumn",
-      "spring"
-    ],
+    "season": ["autumn", "spring"],
     "weather": [],
     "id": 11
   },
@@ -143,9 +104,7 @@
     "type": "tshirt",
     "layer": "light",
     "warmth": 0,
-    "season": [
-      "summer"
-    ],
+    "season": ["summer"],
     "weather": [],
     "id": 12
   },
@@ -155,9 +114,7 @@
     "layer": "light",
     "size": "92",
     "warmth": 0,
-    "season": [
-      "summer"
-    ],
+    "season": ["summer"],
     "weather": [],
     "id": 13
   },
@@ -167,9 +124,7 @@
     "layer": "light",
     "size": "92",
     "warmth": 1,
-    "season": [
-      "summer"
-    ],
+    "season": ["summer"],
     "weather": [],
     "id": 14
   },
@@ -179,14 +134,8 @@
     "layer": "shell",
     "size": "52",
     "warmth": 2,
-    "season": [
-      "summer",
-      "autumn",
-      "spring"
-    ],
-    "weather": [
-      "rain"
-    ],
+    "season": ["summer", "autumn", "spring"],
+    "weather": ["rain"],
     "id": 15
   },
   {
@@ -195,10 +144,7 @@
     "layer": "wool",
     "size": "52",
     "warmth": 2,
-    "season": [
-      "autumn",
-      "spring"
-    ],
+    "season": ["autumn", "spring"],
     "weather": [],
     "id": 16
   },
@@ -208,12 +154,8 @@
     "layer": "shell",
     "size": "52",
     "warmth": 4,
-    "season": [
-      "winter"
-    ],
-    "weather": [
-      "snow"
-    ],
+    "season": ["winter"],
+    "weather": ["snow"],
     "id": 17
   },
   {
@@ -221,12 +163,8 @@
     "type": "mittens",
     "layer": "shell",
     "warmth": 3,
-    "season": [
-      "winter"
-    ],
-    "weather": [
-      "snow"
-    ],
+    "season": ["winter"],
+    "weather": ["snow"],
     "id": 18
   },
   {
@@ -234,12 +172,8 @@
     "type": "socks",
     "layer": "mid",
     "warmth": 3,
-    "season": [
-      "winter"
-    ],
-    "weather": [
-      "snow"
-    ],
+    "season": ["winter"],
+    "weather": ["snow"],
     "id": 19
   }
 ]

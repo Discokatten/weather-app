@@ -21,8 +21,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      # only testing on Node 24 now but could have done
-      # several builds by adding [22.x, 24.x] etc
+      # only testing on Node 24
       matrix:
         node-version: [24.x]
 
@@ -36,7 +35,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: 'npm'
         # npm ci ≈ read-only from package.json version
         # of npm install -> installs all npm modules
         # mentioned in package.json, preferably during CI
@@ -48,6 +47,5 @@ jobs:
         # run whatever is specified in package.json
         # for the script test
       # - run:
-      #     npm run test:api #TODO based on post-they, waiting for vulnerability-fixes
-
+      #     npm run test:api
       - run: npm audit --omit=dev --audit-level=high

@@ -1,4 +1,4 @@
-import { fetchWeatherApi } from 'openmeteo'
+import { fetchWeatherApi } from 'openmeteo';
 export default async function getWeather() {
   const params = {
     latitude: 59.3294,
@@ -30,19 +30,19 @@ export default async function getWeather() {
     timezone: 'Europe/Berlin',
     temporal_resolution: 'hourly_1',
     wind_speed_unit: 'ms',
-  }
+  };
 
-  const url = 'https://api.open-meteo.com/v1/forecast'
-  const responses = await fetchWeatherApi(url, params)
+  const url = 'https://api.open-meteo.com/v1/forecast';
+  const responses = await fetchWeatherApi(url, params);
   // Process first location. Add a for-loop for multiple locations or weather models
-  const response = responses[0]
+  const response = responses[0];
 
   // Attributes for timezone and location
-  const utcOffsetSeconds = response.utcOffsetSeconds()
+  const utcOffsetSeconds = response.utcOffsetSeconds();
 
-  const current = response.current()!
-  const hourly = response.hourly()!
-  const daily = response.daily()!
+  const current = response.current()!;
+  const hourly = response.hourly()!;
+  const daily = response.daily()!;
 
   // Note: The order of weather variables in the URL query and the indices below need to match!
   const weatherData = {
@@ -56,9 +56,17 @@ export default async function getWeather() {
       apparent_temperature: current.variables(5)!.value().toFixed(),
     },
     hourly: {
-      time: [...Array((Number(hourly.timeEnd()) - Number(hourly.time())) / hourly.interval())].map(
+      time: [
+        ...Array(
+          (Number(hourly.timeEnd()) - Number(hourly.time())) /
+            hourly.interval(),
+        ),
+      ].map(
         (_, i) =>
-          new Date((Number(hourly.time()) + i * hourly.interval() + utcOffsetSeconds) * 1000),
+          new Date(
+            (Number(hourly.time()) + i * hourly.interval() + utcOffsetSeconds) *
+              1000,
+          ),
       ),
       temperature_2m: hourly.variables(0)!.valuesArray(),
       apparent_temperature: hourly.variables(1)!.valuesArray(),
@@ -68,8 +76,16 @@ export default async function getWeather() {
       rain: hourly.variables(5)!.valuesArray(),
     },
     daily: {
-      time: [...Array((Number(daily.timeEnd()) - Number(daily.time())) / daily.interval())].map(
-        (_, i) => new Date((Number(daily.time()) + i * daily.interval() + utcOffsetSeconds) * 1000),
+      time: [
+        ...Array(
+          (Number(daily.timeEnd()) - Number(daily.time())) / daily.interval(),
+        ),
+      ].map(
+        (_, i) =>
+          new Date(
+            (Number(daily.time()) + i * daily.interval() + utcOffsetSeconds) *
+              1000,
+          ),
       ),
       temperature_2m_mean: daily.variables(0)!.valuesArray(),
       weather_code: daily.variables(1)!.valuesArray(),
@@ -78,21 +94,23 @@ export default async function getWeather() {
       snowfall_sum: daily.variables(4)!.valuesArray(),
       precipitation_hours: daily.variables(5)!.valuesArray(),
     },
-  }
+  };
 
-  return weatherData
+  return weatherData;
 }
 export async function getDaily() {
-  const weather = await getWeather()
-  const forecast = weather.daily
+  const weather = await getWeather();
+  const forecast = weather.daily;
 
   // Convert float32array to regular array
-  const tempArray = Array.from(forecast.temperature_2m_mean!)
-  const codeArray = Array.from(forecast.weather_code!)
-  const rainArray = Array.from(forecast.rain_sum!)
-  const snowArray = Array.from(forecast.snowfall_sum!)
-  const precipitationHourArray = Array.from(forecast.precipitation_hours!)
-  const precipitationProbArray = Array.from(forecast.precipitation_probability_max!)
+  const tempArray = Array.from(forecast.temperature_2m_mean!);
+  const codeArray = Array.from(forecast.weather_code!);
+  const rainArray = Array.from(forecast.rain_sum!);
+  const snowArray = Array.from(forecast.snowfall_sum!);
+  const precipitationHourArray = Array.from(forecast.precipitation_hours!);
+  const precipitationProbArray = Array.from(
+    forecast.precipitation_probability_max!,
+  );
 
   return {
     weatherData: {
@@ -103,5 +121,5 @@ export async function getDaily() {
       precipitationHourArray,
       precipitationProbArray,
     },
-  }
+  };
 }
