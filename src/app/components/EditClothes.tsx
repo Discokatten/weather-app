@@ -19,9 +19,9 @@ export const EditClothes = ({ item }: { item?: Clothes }) => {
   const [message, setMessage] = useState('');
 
   const handleDelete = async () => {
-    if (item?.item_id)
+    if (item?.id)
       try {
-        await deleteClothes(item.item_id);
+        await deleteClothes(item.id);
 
         setMessage('Borttaget!');
       } catch (error) {
@@ -66,10 +66,10 @@ export const EditClothes = ({ item }: { item?: Clothes }) => {
       data.size_system = isNaN(Number(data.size)) ? 'alpha' : 'numeric';
     }
 
-    // Update if existring, else create
+    // Update if existing, else create
     try {
-      if (item?.item_id) {
-        await updateClothes(item.item_id, data);
+      if (item?.id) {
+        await updateClothes(item.id, data);
       } else {
         await createClothes(data);
       }
@@ -223,7 +223,7 @@ export const EditClothes = ({ item }: { item?: Clothes }) => {
           </button>
         </form>
         <div>
-          {item?.item_id && (
+          {item?.id && (
             <button
               className='absolute mr-0 mt-0 rounded-4xl border border-theme-900 enabled:bg-theme-blue-400 p-4 cursor-pointer'
               type='button'

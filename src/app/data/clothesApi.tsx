@@ -4,7 +4,6 @@ import {
   ValidSeasons,
   ValidWeather,
 } from '../interfaces/clothesInterfaces';
-
 // function buildUrl(filters: Filters) {
 //   const params = new URLSearchParams();
 //   if (filters.size) params.set('clothes', String(filters.size));

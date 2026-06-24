@@ -44,7 +44,7 @@ export default function ClothesCard({
           </div>
           <Link
             className=' bg-theme-600 border border-theme-800 p-5 rounded-2xl'
-            href={`/settings/${detailedItem.item_id}`}
+            href={`/settings/${detailedItem.id}`}
           >
             Redigera
           </Link>

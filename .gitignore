@@ -31,6 +31,18 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+.secrets
+.env
+
 # env files (can opt-in for committing if needed)
 .env*
 
@@ -40,3 +52,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# db
+*.db

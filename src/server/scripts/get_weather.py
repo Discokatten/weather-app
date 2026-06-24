@@ -1,4 +1,3 @@
-import sys
 import pandas as pd
 import openmeteo_requests
 import requests_cache
