@@ -12,7 +12,6 @@ Detta projekt är skapat i utbildningssyfte för att fördjupa mig i NextJS och 
 - ⚙️ [Installation](#installation)
 - 👩‍💻 [Användning](#användning)
 - 🗂️ [Projektstruktur](#projektstruktur)
-- 📈 [Arbetsflöde](#arbetsflöde)
 - 🙋‍♀️ [Bidra](#bidra)
 - 🧾 [Licens](#licens)
 
@@ -87,7 +86,7 @@ npm run dev
 
 ## 👩‍💻 Anvädning
 
- Enkel dashboard där vänstra sidan visar väderinformation och högra sidan visar information om föreslagna kläder.
+Enkel dashboard där vänstra sidan visar väderinformation och högra sidan visar information om föreslagna kläder.
 
 ## 🗂️ Projektstruktur
 
@@ -104,14 +103,6 @@ npm run dev
     |-- lib/                  # Utility och Interfaces
 
 ```
-
-## 📈 Arbetsflöde
-
-- Ta fram en MVP
-- Trello för sprintplanering
-- Figmadesign baserad på challange från [Frontendmentor](https://www.frontendmentor.io/)
-- Började med att arbeta i featurebranches, gick sedan över till att enbart jobba i en dev-branch
-- Kontinuerlig testning och utvärdering innan merge
 
 ## 🙋‍♀️ Bidra
 

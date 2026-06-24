@@ -1,0 +1,10 @@
+pandas
+scikit-learn
+flask
+flask-cors
+openmeteo-requests
+requests-cache
+retry-requests
+pytest
+pytest-mock
+python-dotenv
