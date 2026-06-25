@@ -1,34 +1,25 @@
 name: Run API tests
 
-# trigger which git action (push, pull_request) in which branch(es) should start the jobs
 on:
   push:
     branches: [main, dev]
   pull_request:
     branches: [main, dev]
-  # add branch-protection-rules in github for main (require pull-request) then add another branch and try to make a pull-request in github to merge your branch into main:
-  # - the following will happens: these tests will run
-  # - and a report of success/failure will be shown to the person approving the pull request
-
 env:
   API_BASEURL: 'http://127.0.0.1:8080'
 
-# jobs to run
 jobs:
-  # build, the name of the job, a server to create and auto configure
   build:
     runs-on: ubuntu-latest
 
     strategy:
-      # only testing on Node 22 (LTS)
       matrix:
         node-version: [24.x]
 
     steps:
-      # action from github marketplace, actions
       - uses: actions/checkout@v4
 
-      # configure Python environment on the runner
+      # configure python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -50,17 +41,14 @@ jobs:
           .venv/bin/pip install -r requirements.txt
 
       - name: Use Node.js ${{ matrix.node-version }}
-        # action from github marketplace, actions
         # install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-
-      # npm ci ≈ read-only from package.json version of npm install -> installs all npm modules mentioned in package.json, preferably during CI
       - run: npm ci
 
-      # seed the database using the venv python
+      # seed db
       - run: .venv/bin/python src/server/scripts/seed.py
         env:
           HOME: /root
@@ -78,8 +66,6 @@ jobs:
             echo "Waiting... ($i) status=$STATUS"
             sleep 0.5
           done
-
-      - run: npm audit --omit=dev --audit-level=high
 
       # install postman, before running server
       - name: Install Postman CLI

@@ -41,12 +41,3 @@ def save_clothing_db_mock(name, layer,type,warmth):
        cursor.execute("INSERT INTO clothing (name, layer,type,warmth) VALUES (?,?,?,?)", (name, layer,type,warmth))
        conn.commit()
        conn.close()
-# def save_clothing_db_mock(item):
-#        conn = sqlite3.connect("wardrobe.db")
-#        cursor = conn.cursor()
-#        cursor.execute("""
-#                    INSERT INTO clothing (name, type, layer, warmth, size, size_system)
-#                 VALUES (:name, :type, :layer, :warmth, :size, :size_system)
-#             """, item)
-#        conn.commit()
-#        conn.close()

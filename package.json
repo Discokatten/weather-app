@@ -8,10 +8,13 @@
     "start": "next start",
     "lint": "eslint",
     "server": "python src/server/server.py",
-    "seed": "python src/server/scripts/seed.py"
+    "seed": "python src/server/scripts/seed.py",
+    "test": "vitest"
   },
   "dependencies": {
     "@bybas/weather-icons": "^2.0.0",
+    "@emnapi/core": "^1.11.1",
+    "@emnapi/runtime": "^1.11.1",
     "lucide-react": "^0.545.0",
     "next": "^16.2.6",
     "openmeteo": "^1.2.3",
@@ -35,7 +38,9 @@
     "playwright-bdd": "^9.0.0",
     "tailwindcss": "^4.2.1",
     "ts-jest": "^29.4.11",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.9"
   },
   "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be"
 }
