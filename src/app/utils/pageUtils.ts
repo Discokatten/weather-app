@@ -1,9 +1,12 @@
-export const formatDate = (time: string | number | Date, format: 'full' | 'weekday' = 'full') => {
-  const date = new Date(time)
-  const weekday = date.toLocaleString('sv-SE', { weekday: 'long' })
-  const capitalized = weekday.charAt(0).toUpperCase() + weekday.slice(1)
+export const formatDate = (
+  time: string | number | Date,
+  format: 'full' | 'weekday' = 'full',
+) => {
+  const date = new Date(time);
+  const weekday = date.toLocaleString('sv-SE', { weekday: 'long' });
+  const capitalized = weekday.charAt(0).toUpperCase() + weekday.slice(1);
 
-  if (format === 'weekday') return capitalized
+  if (format === 'weekday') return capitalized;
 
   const rest = date.toLocaleString('sv-SE', {
     day: '2-digit',
@@ -12,7 +15,7 @@ export const formatDate = (time: string | number | Date, format: 'full' | 'weekd
     hour: '2-digit',
     minute: '2-digit',
     timeZone: 'UTC',
-  })
+  });
 
-  return `${capitalized}, ${rest}`
-}
+  return `${capitalized}, ${rest}`;
+};
