@@ -55,3 +55,5 @@ export const EXTRA_LAYERS = {
   WITHWOOL: [BASE_LAYERS['BASELAYER'], 'wool'],
   COLDWINTER: ['wool', BASE_LAYERS['WINTERLAYER']],
 };
+
+export const BASEURL = process.env.BASE_URL;

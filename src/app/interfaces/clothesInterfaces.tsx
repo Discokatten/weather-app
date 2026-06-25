@@ -49,7 +49,7 @@ export type ValidLayers = keyof typeof LAYER_LABELS;
 export interface Clothes {
   name: string;
   weather: ValidWeather[] | [];
-  item_id: number;
+  id: number;
   type: ValidTypes;
   layer: ValidLayers;
   season: ValidSeasons[] | [];

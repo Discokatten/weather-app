@@ -1,10 +1,16 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 from pathlib import Path
+BASE_DIR = Path(__file__).parent.parent
+DB_PATH = Path(os.getenv("WARDROBE_DB", BASE_DIR / "wardrobe.db"))
+
 import sqlite3
 
-BASE_DIR = Path(__file__).parent.parent
-DB_PATH = BASE_DIR / "wardrobe.db"
-conn = sqlite3.connect(DB_PATH)
 
+# DB_PATH = BASE_DIR / "wardrobe.db"
+print("Using DB:", DB_PATH)
 # Predict clothes, modellen hämtar current weather och kör predict
 
 # GET säsong
@@ -24,8 +30,9 @@ def get_conn() -> sqlite3.Connection:
 
 def get_all_clothing(sort_by: str = "warmth", order: str = "asc") -> list[dict]:
     
-    allowed = {"warmth", "name", "type", "layer", "item_id"}
+    allowed = {"warmth", "name", "type", "layer", "id"}
     sort_by = sort_by if sort_by in allowed else "warmth"
+    sort_by = "pk" if sort_by == "id" else sort_by
     order   = "ASC" if order.lower() == "asc" else "DESC"
 
     with get_conn() as conn:
@@ -81,7 +88,7 @@ def get_clothing_by_id(pk: int) -> dict | None:
 
 def update_clothing(item: dict) -> int:
     with get_conn() as conn:
-        cur = conn.execute("""
+        conn.execute("""
             INSERT INTO clothing (pk, name, type, layer, warmth, size, size_system)
             VALUES (:pk, :name, :type, :layer, :warmth, :size, :size_system)
             ON CONFLICT(pk) DO UPDATE SET
@@ -106,7 +113,7 @@ def update_clothing(item: dict) -> int:
     return pk
 
 
-def delete_clothing(pk: str) -> bool:
+def delete_clothing(pk: int) -> bool:
     with get_conn() as conn:
         row = conn.execute(
             "SELECT pk FROM clothing WHERE pk = ?", (pk,)
@@ -121,7 +128,7 @@ def delete_clothing(pk: str) -> bool:
     return True
 
 
-def create_clothing(item: dict) -> None:
+def create_clothing(item: dict) -> int:
     with get_conn() as conn:
         try:
             cur = conn.execute("""
@@ -129,7 +136,7 @@ def create_clothing(item: dict) -> None:
                 VALUES (:name, :type, :layer, :warmth, :size, :size_system)
             """, item)
         except sqlite3.IntegrityError as e:
-            raise ValueError(f"Kunde inte skapa plagg: {e}")
+            raise ValueError(f"Couldn't create item: {e}")
         
         pk = cur.lastrowid
         for s in item.get("season", []):
@@ -137,10 +144,12 @@ def create_clothing(item: dict) -> None:
         for w in item.get("weather", []):
             conn.execute("INSERT INTO clothing_weather VALUES (?,?)", (pk, w))
         conn.commit()
+        
+        return pk
 
 def _row_to_dict(row: sqlite3.Row) -> dict:
     d = dict(row)
-    d["item_id"] = d.pop("pk")  # rename pk to item_id
+    d["id"] = d.pop("pk")
     d["season"]  = d["seasons"].split(",") if d.get("seasons") else []
     d["weather"] = d["weathers"].split(",") if d.get("weathers") else []
     d.pop("seasons", None)

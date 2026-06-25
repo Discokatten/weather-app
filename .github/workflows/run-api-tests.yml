@@ -1,151 +1,102 @@
 name: Run API tests
 
-# Trigger which git action (push, pull_request)
-# in which branch(es) should start the jobs...
 on:
   push:
     branches: [main, dev]
   pull_request:
     branches: [main, dev]
-  # add branch-protection-rules in github for main (require pull-request)
-  # then add another branch and try to make a pull-request in github
-  # to merge your branch into main:
-  # - the following will happens: these tests will run
-  # - and a report of success/failure will be shown to the person
-  #   approving the pull request
+env:
+  API_BASEURL: 'http://127.0.0.1:8080'
 
-# jobs to run
 jobs:
-  # build, the name of the job, a server to create and auto configure
   build:
     runs-on: ubuntu-latest
 
     strategy:
-      # only testing on Node 24
       matrix:
         node-version: [24.x]
 
     steps:
-      # action from github marketplace, actions
-      # checkout this repo on the server
       - uses: actions/checkout@v4
+
+      # configure python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      # cache python venv
+      - name: Cache Python virtual environment
+        id: cache-python-venv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+
+      - name: Install Python dependencies
+        # only run if no cache
+        if: steps.cache-python-venv.outputs.cache-hit != 'true'
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install -r requirements.txt
+
       - name: Use Node.js ${{ matrix.node-version }}
-        # action from github marketplace, actions
         # install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-        # npm ci ≈ read-only from package.json version
-        # of npm install -> installs all npm modules
-        # mentioned in package.json, preferably during CI
       - run: npm ci
-      - name: Install Python dependencies
-        run: |
-          python -m venv .venv
-          .venv/bin/pip install -r requirements.txt
-      # seed the database using the venv python
+
+      # seed db
       - run: .venv/bin/python src/server/scripts/seed.py
         env:
           HOME: /root
-      # - name: Start server
-      #   run: nohup .venv/bin/python src/server/server.py &
+
+      # wait for server to start before checking status and installing postman
       - name: Start server and wait
         run: |
-          .venv/bin/python src/server/server.py > server.log 2>&1 &
-          sleep 3
-          for i in {1..15}; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/api/clothes)
-            [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 500 ] && break
+          .venv/bin/python src/server/server.py &
+          for i in {1..20}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/api/clothes || echo "000")
+            if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 500 ]; then
+              echo "Server is up on try $i with status $STATUS!"
+              break
+            fi
             echo "Waiting... ($i) status=$STATUS"
-            sleep 2
+            sleep 0.5
           done
-          cat server.log
-                echo "Server status:"
-                curl -v http://127.0.0.1:8080 || true
 
-      - run: npm audit --omit=dev --audit-level=high
-
+      # install postman, before running server
       - name: Install Postman CLI
         run: |
           curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+
       - name: Login to Postman CLI
         run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
-      - name: Run API tests
+
+      # start server and run tests in a single block so the process stays alive
+      - name: Start Server and Run API Tests
         run: |
-          postman collection run "20428110-67f8120e-b505-47f7-a83f-d6daaf2c7b1d" --env-var "BASEURL=http://127.0.0.1:8080"
+          echo "Starting Flask server in the background..."
+          .venv/bin/python src/server/server.py &
 
-# name: Run API tests
+          echo "Polling application readiness..."
+          for i in {1..20}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/api/clothes || echo "000")
+            if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 500 ]; then
+              echo "Server successfully reached with status $STATUS!"
+              break
+            fi
+            echo "Waiting for port 8080... ($i) status=$STATUS"
+            sleep 0.5
+            
+            # If we reach the last iteration and it's still down, fail early
+            if [ $i -eq 20 ]; then
+              echo "Error: Server failed to start up in time."
+              exit 1
+            fi
+          done
 
-# # Trigger which git action (push, pull_request)
-# # in which branch(es) should start the jobs...
-# on:
-#   push:
-#     branches: [main, dev]
-#   pull_request:
-#     branches: [main, dev]
-#   # add branch-protection-rules in github for main (require pull-request)
-#   # then add another branch and try to make a pull-request in github
-#   # to merge your branch into main:
-#   # - the following will happens: these tests will run
-#   # - and a report of success/failure will be shown to the person
-#   #   approving the pull request
-
-# # jobs to run
-# jobs:
-#   # build, the name of the job, a server to create and auto configure
-#   build:
-#     runs-on: ubuntu-latest
-
-#     strategy:
-#       # only testing on Node 24
-#       matrix:
-#         node-version: [24.x]
-
-#     steps:
-#       # action from github marketplace, actions
-#       # checkout this repo on the server
-#       - uses: actions/checkout@v4
-#       - name: Use Node.js ${{ matrix.node-version }}
-#         # action from github marketplace, actions
-#         # install Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: ${{ matrix.node-version }}
-#           cache: 'npm'
-#         # npm ci ≈ read-only from package.json version
-#         # of npm install -> installs all npm modules
-#         # mentioned in package.json, preferably during CI
-#       - run: npm ci
-#       - name: Install Python dependencies
-#       - run: |
-#           python -m venv .venv
-#             .venv/bin/pip install -r requirements.txt
-
-#           - run: .venv/bin/python src/server/scripts/seed.py
-#       # # seed db
-#       # - run: npm run seed
-#         # start the web server in the background
-#         # nohup prevents the process from stopping if the terminal closes
-#       - run: nohup npm run server &
-#         # poll until the server responds before continuing
-#         # retries every 2 seconds up to 15 times (30 seconds max)
-#         # replace localhost:3000 with your actual port/endpoint
-#       - name: Wait for server to be ready
-#         run: |
-#           for i in {1..15}; do
-#             curl -s http://localhost:3000 && break
-#             echo "Waiting... ($i)"
-#             sleep 2
-#           done
-
-#       - run: npm audit --omit=dev --audit-level=high
-
-#       - name: Install Postman CLI
-#         run: |
-#           curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-#       - name: Login to Postman CLI
-#         run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
-#       - name: Run API tests
-#         run: |
-#           postman collection run "20428110-67f8120e-b505-47f7-a83f-d6daaf2c7b1d"
+          echo "Executing Postman Collection..."
+          postman collection run "20428110-67f8120e-b505-47f7-a83f-d6daaf2c7b1d" --env-var "BASEURL=$API_BASEURL" --bail
