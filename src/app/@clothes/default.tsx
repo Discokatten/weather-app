@@ -1,3 +1,3 @@
-export default function DefaultClothes() {
-  return null
+export default function Default() {
+  return null;
 }

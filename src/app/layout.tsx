@@ -21,12 +21,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  weather,
-  clothes,
 }: Readonly<{
   children: React.ReactNode;
-  weather: React.ReactNode;
-  clothes: React.ReactNode;
 }>) {
   return (
     <html lang='en'>
@@ -36,10 +32,8 @@ export default function RootLayout({
         <header>
           <NavBar />
         </header>
-        {children}
         <main className='flex wrap gap-4 text-white justify-center'>
-          {weather}
-          {clothes}
+          {children}
         </main>
       </body>
     </html>

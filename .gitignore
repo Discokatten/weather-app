@@ -54,4 +54,4 @@ venv/
 next-env.d.ts
 
 # db
-*.db
+*.db*
