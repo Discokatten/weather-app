@@ -65,6 +65,10 @@ def _clean_size(size) -> int | str | None:
 def seed(df: pd.DataFrame):
     # Seed cleaned data to db
     DDL = """
+        CREATE TABLE IF NOT EXISTS profile (
+            pk      INTEGER PRIMARY KEY AUTOINCREMENT,
+            name    TEXT    NOT NULL 
+        );
         CREATE TABLE IF NOT EXISTS clothing (
             pk          INTEGER PRIMARY KEY AUTOINCREMENT,
             name        TEXT    NOT NULL,
