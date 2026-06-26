@@ -1,7 +1,7 @@
 # Väderapp i NextJS
 
 En väderapp skapad i **NextJS** och med **Typescript**. Målet är att hämta väderdata från ett externt api, sedan ge förslag på vilka ytterkläder som är lämpliga för dagen.
-Detta projekt är skapat i utbildningssyfte för att fördjupa mig i NextJS och TypeScript.
+Detta projekt är skapat i utbildningssyfte för att fördjupa mig i NextJS, TypeScript, Python, Machine Learning och DevSec.
 
 ## Innehållsförteckning
 
@@ -10,10 +10,6 @@ Detta projekt är skapat i utbildningssyfte för att fördjupa mig i NextJS och 
 - 💡 [Kommande funktioner](#kommande-funktioner)
 - 🛠️ [Teknologier](#teknologier)
 - ⚙️ [Installation](#installation)
-- 👩‍💻 [Användning](#användning)
-- 🗂️ [Projektstruktur](#projektstruktur)
-- 🙋‍♀️ [Bidra](#bidra)
-- 🧾 [Licens](#licens)
 
 ---
 
@@ -48,15 +44,19 @@ Projektet är tänkt att byggas ut med mer funktionalitet.
 ### 💡 Kommande funktioner:
 
 - [] Möjlighet att ändra location
-- [] Lägga till egna kläder
-- [] Lägga till storlek på kläderna
-- [] Detaljsida för att editera klädesplagg eller se mer information
+- [x] Lägga till egna kläder
+- [x] Lägga till storlek på kläderna
+- [x] Detaljsida för att editera klädesplagg eller se mer information
 
 ---
 
 ## 🛠️ Teknologier
 
 - [Next.js 15 App Router](https://nextjs.org/)
+- [Python](https://www.python.org/)
+- [Flask](https://flask.palletsprojects.com/en/stable/)
+- [Scikit](https://scikit-learn.org/)
+- [SQLite3](https://sqlite.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Wave](https://wave.webaim.org/)
@@ -71,50 +71,36 @@ Projektet är tänkt att byggas ut med mer funktionalitet.
 ```bash
 
 # Klona repo
-git clone <https://github.com/Discokatten/weather>
+git clone <https://github.com/Discokatten/weather-app>
 
 # Gå in i projektmappen
-cd <weather>
+cd <weather-app>
 
 # Installera beroenden
 npm -i
 
+# Skapa och aktivera venv
+**Mac/Linux:**
+python -m venv venv
+source venv/bin/activate
+
+**Windows:**
+python -m venv venv
+venv\Scripts\activate
+
+# Installera beroenden
+pip install -r requirements.txt
+
+# Skapa och seeda databasen
+npm run seed
+
 # Starta utvecklingsserver
 npm run dev
+npm run server
 
 ```
 
 ## 👩‍💻 Anvädning
 
 Enkel dashboard där vänstra sidan visar väderinformation och högra sidan visar information om föreslagna kläder.
-
-## 🗂️ Projektstruktur
-
-```
-|-- app/
-    |-- @clothes/
-        |-- page.tsx          # Dashboard kläder
-        |-- _components/      # Återanvändbara komponenter, kläder
-    |-- @weather/
-        |-- page.tsx          # Dashboard väder
-        |-- _components/      # Återanvändbara komponenter, väder
-    |-- components/           # Återanvändbara komponenter, hela sidan
-    |-- data/                 # Datahantering, fetch och json
-    |-- lib/                  # Utility och Interfaces
-
-```
-
-## 🙋‍♀️ Bidra
-
-Vill du bidra?
-
-1. Forka projektet
-2. Skapa en feature branch(`git switch -c <feature-name>`)
-3. Commit and push
-4. Send a pull-request
-
----
-
-## 🧾 Licens
-
-Detta projekt är utvecklat i utbildningssyfte och är inte avsett för produktion
+Meny för att se alla kläder samt lägga till nya
