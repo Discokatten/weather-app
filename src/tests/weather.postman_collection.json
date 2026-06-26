@@ -1,0 +1,261 @@
+{
+  "info": {
+    "_postman_id": "67f8120e-b505-47f7-a83f-d6daaf2c7b1d",
+    "name": "weather",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "20428110"
+  },
+  "item": [
+    {
+      "name": "Post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"POST successful\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "const json = pm.response.json();",
+              "",
+              "pm.test(\"Check response body contains id\", function () {",
+              "    pm.expect(json).to.have.property(\"item\");",
+              "    pm.expect(json).to.have.property(\"message\");",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"layer\": \"shell\",\r\n    \"name\": \"Flygplansjacka\",\r\n    \"season\": [\r\n        \"autumn\",\r\n        \"spring\"\r\n    ],\r\n    \"size\": 92,\r\n    \"size_system\": \"numeric\",\r\n    \"type\": \"jacket\",\r\n    \"warmth\": 2,\r\n    \"weather\": [\r\n        \"wind\"\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BASEURL}}/api/clothes",
+          "host": ["{{BASEURL}}"],
+          "path": ["api", "clothes"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetOne",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json().clothes;",
+              "",
+              "pm.test(\"GET single item successful\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(",
+              "  'Response contain at least id, name, warmth, type',",
+              " function () {",
+              "    pm.expect(json).to.have.property(\"id\");",
+              "    pm.expect(json).to.have.property(\"name\");",
+              "    pm.expect(json).to.have.property(\"type\");",
+              "    pm.expect(json).to.have.property( \"warmth\");",
+              "});",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [""],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASEURL}}/api/clothes/:id",
+          "host": ["{{BASEURL}}"],
+          "path": ["api", "clothes", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Put",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.test('PUT is successful', () => pm.response.to.have.status(200));\r",
+              "\r",
+              "\r",
+              "pm.test('Response is an object', () =>\r",
+              "  pm.expect(Object.isObject(json)).to.equal(true),\r",
+              ");\r",
+              "pm.test(\"Check response body contains id\", function () {\r",
+              "    pm.expect(json).to.have.property(\"id\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "   {\r\n            \"id\": 4,\r\n            \"layer\": \"light\",\r\n            \"name\": \"shorts\",\r\n            \"season\": [\r\n                \"summer\",\"spring\"\r\n            ],\r\n            \"size\": \"92\",\r\n            \"size_system\": \"numeric\",\r\n            \"type\": \"pants\",\r\n            \"warmth\": 0,\r\n            \"weather\": []\r\n        }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BASEURL}}/api/clothes/:id",
+          "host": ["{{BASEURL}}"],
+          "path": ["api", "clothes", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "4"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetAll",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('GET all successful', () => pm.response.to.have.status(200));",
+              "",
+              "const json = pm.response.json().clothes;",
+              "",
+              "pm.test('Response is an array', () =>",
+              "  pm.expect(Array.isArray(json)).to.equal(true),",
+              ");",
+              "",
+              "pm.test('Array contains at least one item', () =>",
+              "  pm.expect(json.length).to.be.above(0),",
+              ");",
+              "",
+              "pm.test('First item has expected fields', () => {",
+              "  pm.expect(json[0]).to.have.property('warmth');",
+              "  pm.expect(json[0]).to.have.property('name');",
+              "  pm.expect(json[0]).to.have.property('type');",
+              "});",
+              "",
+              "pm.test(",
+              "  'Response objects should all contain at least name, warmth, type',",
+              "  function () {",
+              "    for (let obj of json) {",
+              "      pm.expect(obj).to.have.any.keys('name', 'warmth', 'type');",
+              "    }",
+              "  },",
+              ");",
+              "",
+              "",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [""],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASEURL}}/api/clothes",
+          "host": ["{{BASEURL}}"],
+          "path": ["api", "clothes"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('DELETE successful', () => pm.response.to.have.status(200));\r",
+              "const json = pm.response.json()\r",
+              "\r",
+              "pm.test('Response is an object', () =>\r",
+              "  pm.expect(Object.isObject(json)).to.equal(true),\r",
+              ");\r",
+              "pm.test(\"Check response body contains id\", function () {\r",
+              "    pm.expect(json).to.have.property(\"id\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{BASEURL}}/api/clothes/:id",
+          "host": ["{{BASEURL}}"],
+          "path": ["api", "clothes", ":id"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
