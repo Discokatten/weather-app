@@ -54,7 +54,7 @@ def put_clothing(id: int):
     except ValueError as e:
         return jsonify({"error": str(e)}), 409
 
-    return jsonify({"message":"updated","item": body["name"]}), 200
+    return jsonify({"message":"updated","id": id}), 200
 
 @app.get("/api/clothes/<int:id>")
 def get_one_item(id: int):
@@ -68,7 +68,7 @@ def delete_item(id: int):
     item = delete_clothing(id)
     if not item:
         return jsonify({"error": "Not found"}), 404
-    return jsonify({"message":"deleted","item": id}), 200
+    return jsonify({"message":"deleted","id": item}), 200
 
 if __name__ == "__main__":
     app.run(debug = False, host='127.0.0.1', port=8080) 
