@@ -5,6 +5,7 @@ import {
   SEASON_LABELS,
   TYPE_LABELS,
 } from '@/app/interfaces/clothesInterfaces';
+import { capitalize } from '@/app/utils/pageUtils';
 import Link from 'next/link';
 
 export default function ClothesCard({
@@ -14,10 +15,11 @@ export default function ClothesCard({
   item: string;
   detailedItem?: Clothes;
 }) {
+  const itemName = capitalize(item);
   return (
     <div className='bg-theme-700 border-2 border-theme-600 rounded-2xl content-center text-center p-7 m-4'>
       {detailedItem && <ImagePlaceholder />}
-      <p className='text-4xl mb-10'>{item}</p>
+      <p className='text-4xl mb-10'>{itemName}</p>
       {detailedItem && (
         <>
           <div className='border-b border-theme-600 mt-2 flex justify-between'>

@@ -38,7 +38,7 @@ export const getAllClothes = async (
 
   return data.clothes;
 };
-export const getClothesById = async (id: string): Promise<Clothes> => {
+export const getClothesById = async (id: number): Promise<Clothes> => {
   const res = await fetch(`${BASEURL}/${id}`);
 
   if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
