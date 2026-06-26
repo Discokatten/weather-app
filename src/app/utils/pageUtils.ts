@@ -7,8 +7,9 @@ export const formatDate = (
 ) => {
   const date = new Date(time);
   const weekday = date.toLocaleString('sv-SE', { weekday: 'long' });
+  const capitalized = capitalize(weekday);
 
-  if (format === 'weekday') return capitalize(weekday);
+  if (format === 'weekday') return capitalized;
 
   const rest = date.toLocaleString('sv-SE', {
     day: '2-digit',
@@ -19,5 +20,5 @@ export const formatDate = (
     timeZone: 'UTC',
   });
 
-  return `${weekday}, ${rest}`;
+  return `${capitalized}, ${rest}`;
 };
