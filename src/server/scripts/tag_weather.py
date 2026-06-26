@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from utils.filter_clothes import filter_clothes
+from filter_clothes import filter_clothes
 from utils.consts import VALID_LAYERS, SNOW_CODES, STORM_CODES, RAIN_CODES, WINDY_MS
 
 def label_row_by_layer(row) -> dict:

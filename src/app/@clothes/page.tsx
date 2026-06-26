@@ -1,6 +1,6 @@
 import { getDaily } from '@/app/data/weatherApi';
 import WeatherAnimation from '@/app/components/WeatherAnimation';
-import ClothesDetails from './_components/ClothesDetails';
+import SuggestClothes from './_components/SuggestClothes';
 
 export default async function RenderClothes() {
   const { weatherData } = await getDaily();
@@ -12,7 +12,7 @@ export default async function RenderClothes() {
 
   return (
     <div className='bg-theme-800 rounded-2xl md:w-100 mb-2'>
-      <ClothesDetails />
+      <SuggestClothes />
       <ul className='bg-theme-700 border border-theme-600 rounded-2xl content-center text-center p-3 m-4'>
         <li>Medeltemperatur: {temp} °C</li>
         <li>Risk för nederbörd: {precipitationProb}%</li>

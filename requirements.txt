@@ -8,3 +8,4 @@ retry-requests
 pytest
 pytest-mock
 python-dotenv
+pip-audit

@@ -1,11 +1,21 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
 from pathlib import Path
 import pandas as pd
-from utils.consts import VALID_LAYERS, BASE_LAYERS, EXTRA_LAYERS
+import sys
+# sys.path.insert(0, str(Path(__file__).parent.parent))
+BASE_DIR = Path(__file__).parent.parent
+DB_PATH = Path(os.getenv("WARDROBE_DB", BASE_DIR / "wardrobe.db"))
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+from utils.consts import VALID_LAYERS, BASE_LAYERS, EXTRA_LAYERS
+from clothes_api import get_all_clothing
+
 DATA_DIR = BASE_DIR / 'data'
 
-df = pd.read_json(DATA_DIR / 'clothes_cleaned.json')
+clothes_list = get_all_clothing()
+df = pd.DataFrame(clothes_list)
+
 clothes_list = df.to_dict(orient='records')
 
 # Filter clothes based on temp and condition
