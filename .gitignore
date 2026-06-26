@@ -11,6 +11,9 @@
 !.yarn/versions
 .prettierrc.json
 
+# local stuff
+/src/server/data/historical*
+
 # testing
 /coverage
 
@@ -55,3 +58,4 @@ next-env.d.ts
 
 # db
 *.db*
+*sqlite
