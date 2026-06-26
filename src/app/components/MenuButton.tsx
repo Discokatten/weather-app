@@ -49,6 +49,13 @@ export default function MenuButton() {
           >
             Lägg till kläder
           </Link>
+          <Link
+            href='/settings/profile/'
+            className='block rounded-md px-3 py-2 text-white hover:bg-theme-800'
+            onClick={() => setOpen(false)}
+          >
+            Gå till profil
+          </Link>
         </div>
       )}
     </div>

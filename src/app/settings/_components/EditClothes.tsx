@@ -1,17 +1,17 @@
 'use client';
 import { useForm } from 'react-hook-form';
-import { LAYERS, SEASONS, TYPES, WARMTH, WEATHER } from '../lib/consts';
-import { Clothes } from '../interfaces/clothesInterfaces';
+import { LAYERS, SEASONS, TYPES, WARMTH, WEATHER } from '@/app/lib/consts';
+import { Clothes } from '@/app/interfaces/clothesInterfaces';
 import {
   ApiError,
   createClothes,
   deleteClothes,
   updateClothes,
-} from '../data/clothesApi';
+} from '@/app/data/clothesApi';
 import { useRouter } from 'next/navigation';
-import ImagePlaceholder from './ImagePlaceholder';
+import ImagePlaceholder from '@/app/components/ImagePlaceholder';
 import { useState } from 'react';
-import { capitalize } from '../utils/pageUtils';
+import { capitalize } from '@/app/utils/pageUtils';
 
 export const EditClothes = ({ item }: { item?: Clothes }) => {
   const router = useRouter();
@@ -27,6 +27,9 @@ export const EditClothes = ({ item }: { item?: Clothes }) => {
         await deleteClothes(item.id);
 
         setMessage('Borttaget!');
+        setTimeout(() => {
+          router.replace('/settings');
+        }, 4000);
       } catch (error) {
         console.error('Error:', error);
       }

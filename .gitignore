@@ -11,6 +11,9 @@
 !.yarn/versions
 .prettierrc.json
 
+# local stuff
+/src/server/data/historical*
+
 # testing
 /coverage
 

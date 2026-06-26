@@ -1,4 +1,4 @@
-import { EditClothes } from '@/app/components/EditClothes';
+import { EditClothes } from '@/app/settings/_components/EditClothes';
 import { getClothesById } from '@/app/data/clothesApi';
 import SettingsHeader from '@/app/components/SettingsHeader';
 
