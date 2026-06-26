@@ -10,6 +10,7 @@ Detta projekt är skapat i utbildningssyfte för att fördjupa mig i NextJS, Typ
 - 💡 [Kommande funktioner](#kommande-funktioner)
 - 🛠️ [Teknologier](#teknologier)
 - ⚙️ [Installation](#installation)
+- ⚙️ [API-testning](#api-testning)
 
 ---
 
@@ -99,6 +100,10 @@ npm run dev
 npm run server
 
 ```
+
+## API-testning
+
+Importera `tests/weather.postman_collection.json` i Postman för att testa endpoints.
 
 ## 👩‍💻 Anvädning
 
