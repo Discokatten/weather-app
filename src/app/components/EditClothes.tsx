@@ -11,12 +11,15 @@ import {
 import { useRouter } from 'next/navigation';
 import ImagePlaceholder from './ImagePlaceholder';
 import { useState } from 'react';
+import { capitalize } from '../utils/pageUtils';
 
 export const EditClothes = ({ item }: { item?: Clothes }) => {
   const router = useRouter();
 
   const [apiErrors, setApiErrors] = useState<string[]>([]);
   const [message, setMessage] = useState('');
+
+  const itemName = capitalize(item?.name);
 
   const handleDelete = async () => {
     if (item?.id)
@@ -37,9 +40,9 @@ export const EditClothes = ({ item }: { item?: Clothes }) => {
   } = useForm<Clothes>({
     mode: 'onChange',
     defaultValues: {
-      name: item?.name,
+      name: itemName,
       type: item?.type,
-      layer: item?.layer,
+      layer: item?.layer === 'none' ? undefined : item?.layer,
       warmth: item?.warmth !== undefined ? String(item.warmth) : undefined,
       size: item?.size,
       season: item?.season || [],
@@ -90,150 +93,162 @@ export const EditClothes = ({ item }: { item?: Clothes }) => {
   };
 
   return (
-    <>
-      <div className='mt-20'>
-        <ImagePlaceholder />
-      </div>
-      <div className='bg-theme-700 mb-10 border border-theme-600 text-white rounded-2xl pt-10 flex min-w-85 justify-evenly max-w-200 m-auto  text-2xl'>
-        <form onSubmit={handleSubmit(onSubmit)} className='grid gap-2 '>
-          <label htmlFor='name' className='sr-only'>
-            Namn på plagget
+    <div className='bg-theme-700 border max-w-250 border-theme-600 rounded-3xl mr-auto ml-auto p-8 text-white shadow-lg'>
+      <ImagePlaceholder />
+
+      <form onSubmit={handleSubmit(onSubmit)} className='grid gap-6 text-lg'>
+        <label htmlFor='name' className='sr-only'>
+          Namn på plagget
+        </label>
+        <input
+          className='w-full rounded-3xl border border-theme-600 bg-theme-800 p-4 text-2xl text-white placeholder:text-theme-300 focus:border-theme-blue-500 focus:outline-none focus:ring-2 focus:ring-theme-blue-500'
+          type='text'
+          id='name'
+          placeholder='Namnge plagget'
+          {...register('name', {
+            required: true,
+            minLength: 2,
+            maxLength: 99,
+          })}
+        />
+        {errors.name && (
+          <span className='text-theme-orange text-sm'>
+            Namnet är obligatoriskt
+          </span>
+        )}
+
+        <label htmlFor='type' className='text-xl font-semibold'>
+          Välj klädestyp
+        </label>
+        <select
+          id='type'
+          className='w-full rounded-3xl border border-theme-600 bg-theme-800 p-4 text-white focus:border-theme-blue-500 focus:outline-none focus:ring-2 focus:ring-theme-blue-500'
+          {...register('type')}
+        >
+          {TYPES.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select>
+
+        <label htmlFor='layer' className='text-xl font-semibold'>
+          Vilket lager?
+        </label>
+        <select
+          id='layer'
+          className='w-full rounded-3xl border border-theme-600 bg-theme-800 p-4 text-white focus:border-theme-blue-500 focus:outline-none focus:ring-2 focus:ring-theme-blue-500'
+          {...register('layer')}
+        >
+          <option value=''>Välj lager</option>
+          {LAYERS.filter((item) => item.id !== 'none').map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select>
+
+        <label htmlFor='season' className='text-xl font-semibold'>
+          Säsong
+        </label>
+        <div className='grid gap-3 rounded-3xl border border-theme-600 bg-theme-800 p-4'>
+          {SEASONS.map((season) => (
+            <label
+              key={season.id}
+              className='flex items-center gap-4 mb-2 cursor-pointer'
+            >
+              <input
+                type='checkbox'
+                value={season.id}
+                {...register('season')}
+              />
+              {season.name}
+            </label>
+          ))}
+        </div>
+        <label htmlFor='weather' className='text-xl font-semibold'>
+          Väder
+        </label>
+        <div className='grid gap-3 rounded-3xl border border-theme-600 bg-theme-800 p-4'>
+          {WEATHER.map((weather, i) => (
+            <label
+              key={i}
+              className='flex items-center gap-4 mb-2 cursor-pointer'
+            >
+              <input
+                type='checkbox'
+                value={weather.id}
+                {...register('weather')}
+              />
+              {weather.name}
+            </label>
+          ))}
+        </div>
+        <div className='grid gap-3'>
+          <label htmlFor='size' className='text-xl font-semibold'>
+            Storlek
           </label>
           <input
-            className='border p-2 text-3xl'
+            id='size'
             type='text'
-            id='name'
-            placeholder='Ge plagget ett namn'
-            {...register('name', {
-              required: true,
-              minLength: 2,
-              maxLength: 99,
-            })}
+            className='w-full rounded-3xl border border-theme-600 bg-theme-800 p-4 text-white placeholder:text-theme-300 focus:border-theme-blue-500 focus:outline-none focus:ring-2 focus:ring-theme-blue-500'
+            placeholder='36 / S/M'
+            {...register('size')}
           />
-          {errors.name && <span>Namnet är obligatoriskt</span>}
+        </div>
 
-          <label htmlFor='type' className='mt-15 text-3xl'>
-            Välj klädestyp:
-          </label>
-          <select id='type' className='bg-theme-600' {...register('type')}>
-            {TYPES.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
-
-          <label htmlFor='layer' className='mt-10 text-3xl'>
-            Vilket lager?
-          </label>
-          <select id='layer' className=' bg-theme-600' {...register('layer')}>
-            {LAYERS.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
-
-          <label htmlFor='season' className='mt-10 text-3xl'>
-            Säsong?
-          </label>
-          <div className='border-b mt-1 border-theme-800'>
-            {SEASONS.map((season) => (
-              <label
-                key={season.id}
-                className='flex items-center gap-4 mb-2 cursor-pointer'
-              >
-                <input
-                  type='checkbox'
-                  value={season.id}
-                  {...register('season')}
-                />
-                {season.name}
-              </label>
-            ))}
-          </div>
-          <label htmlFor='weather' className='mt-10 text-3xl'>
-            Väder?
-          </label>
-          <div className=' border-b mt-1 mb-1 border-theme-800'>
-            {WEATHER.map((weather, i) => (
+        <fieldset className='grid gap-4 rounded-3xl border border-theme-600 bg-theme-800 p-4'>
+          <legend className='text-xl font-semibold'>Hur varmt? (1-4)</legend>
+          <div className='grid gap-3 sm:grid-cols-4'>
+            {WARMTH.map((warmth, i) => (
               <label
                 key={i}
-                className='flex items-center gap-4 mb-2 cursor-pointer'
+                className='inline-flex items-center justify-center gap-3 rounded-3xl border border-theme-600 bg-theme-900 px-4 py-3 text-white transition hover:border-theme-blue-500 hover:bg-theme-800 cursor-pointer'
               >
                 <input
-                  type='checkbox'
-                  value={weather.id}
-                  {...register('weather')}
+                  type='radio'
+                  className='h-5 w-5 accent-theme-blue-500'
+                  value={warmth}
+                  {...register('warmth', { required: true })}
                 />
-                {weather.name}
+                <span>{warmth}</span>
               </label>
             ))}
           </div>
-          <div className='mb-5'>
-            <label htmlFor='size' className='mt-10 mr-10 text-3xl'>
-              Storlek?
-            </label>
-            <input
-              id='size'
-              type='text'
-              className='border border-theme-800 rounded-lg bg-theme-600 max-w-30 p-2'
-              placeholder='36 / S/M'
-              {...register('size')}
-            />
-          </div>
-
-          <fieldset>
-            <legend className='mt-10 text-3xl'>Hur varmt? (1-4)</legend>
-            <div className='flex gap-4'>
-              {WARMTH.map((warmth, i) => (
-                <label
-                  key={i}
-                  className='flex items-center gap-2 cursor-pointer'
-                >
-                  <input
-                    type='radio'
-                    className='m-5'
-                    value={warmth}
-                    {...register('warmth', { required: true })}
-                  />
-                  {warmth}
-                </label>
-              ))}
-            </div>
-            {errors.warmth && <span>Välj en värmenivå</span>}
-          </fieldset>
-          {apiErrors.length > 0 && (
-            <ul className='text-red-400 text-xl mt-2'>
-              {apiErrors.map((e, i) => (
-                <li key={i}>{e}</li>
-              ))}
-            </ul>
+          {errors.warmth && (
+            <span className='text-theme-orange text-sm'>Välj en värmenivå</span>
           )}
+        </fieldset>
+        {apiErrors.length > 0 && (
+          <ul className='text-red-400 text-lg mt-2 space-y-2'>
+            {apiErrors.map((e, i) => (
+              <li key={i}>• {e}</li>
+            ))}
+          </ul>
+        )}
 
-          <div className='text-green-300 text-4xl flex justify-center mt-5'>
-            {message}
-          </div>
-          <button
-            className='rounded-2xl mt-5 mb-10 disabled:bg-theme-300 enabled:bg-theme-blue-700 p-2 cursor-pointer'
-            type='submit'
-            disabled={!isValid}
-          >
-            Spara
-          </button>
-        </form>
-        <div>
-          {item?.id && (
-            <button
-              className='absolute mr-0 mt-0 rounded-4xl border border-theme-900 enabled:bg-theme-blue-400 p-4 cursor-pointer'
-              type='button'
-              onClick={handleDelete}
-            >
-              X
-            </button>
-          )}
+        <div className='text-green-300 text-xl flex justify-center mt-5'>
+          {message}
         </div>
+        <button
+          className='w-70 rounded-3xl mr-auto ml-auto bg-theme-blue-700 py-4 text-xl font-semibold transition hover:bg-theme-blue-500 disabled:bg-theme-300 disabled:text-gray-700'
+          type='submit'
+          disabled={!isValid}
+        >
+          Spara
+        </button>
+      </form>
+      <div className='flex justify-end'>
+        {item?.id && (
+          <button
+            className='rounded-3xl border mt-5  border-red-500 bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-500'
+            type='button'
+            onClick={handleDelete}
+          >
+            Ta bort
+          </button>
+        )}
       </div>
-    </>
+    </div>
   );
 };

@@ -1,12 +1,14 @@
+export const capitalize = (value?: string) =>
+  value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
+
 export const formatDate = (
   time: string | number | Date,
   format: 'full' | 'weekday' = 'full',
 ) => {
   const date = new Date(time);
   const weekday = date.toLocaleString('sv-SE', { weekday: 'long' });
-  const capitalized = weekday.charAt(0).toUpperCase() + weekday.slice(1);
 
-  if (format === 'weekday') return capitalized;
+  if (format === 'weekday') return capitalize(weekday);
 
   const rest = date.toLocaleString('sv-SE', {
     day: '2-digit',
@@ -17,5 +19,5 @@ export const formatDate = (
     timeZone: 'UTC',
   });
 
-  return `${capitalized}, ${rest}`;
+  return `${weekday}, ${rest}`;
 };
