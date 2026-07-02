@@ -8,6 +8,7 @@ import {
   deleteClothes,
   updateClothes,
 } from '@/app/data/clothesApi';
+import { Confirm } from '@/app/components/Confirm';
 import { useRouter } from 'next/navigation';
 import ImagePlaceholder from '@/app/components/ImagePlaceholder';
 import { useState } from 'react';
@@ -18,22 +19,24 @@ export const EditClothes = ({ item }: { item?: Clothes }) => {
 
   const [apiErrors, setApiErrors] = useState<string[]>([]);
   const [message, setMessage] = useState('');
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const itemName = capitalize(item?.name);
 
   const handleDelete = async () => {
-    if (item?.id)
-      try {
-        await deleteClothes(item.id);
+    if (!item?.id) return;
 
-        setMessage('Borttaget!');
-        setTimeout(() => {
-          router.replace('/settings');
-        }, 4000);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    else return;
+    try {
+      await deleteClothes(item.id);
+
+      setMessage('Borttaget!');
+      setConfirmDelete(false);
+      setTimeout(() => {
+        router.replace('/settings');
+      }, 4000);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const {
@@ -246,12 +249,20 @@ export const EditClothes = ({ item }: { item?: Clothes }) => {
           <button
             className='rounded-3xl border mt-5  border-red-500 bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-500'
             type='button'
-            onClick={handleDelete}
+            onClick={() => setConfirmDelete(true)}
           >
             Ta bort
           </button>
         )}
       </div>
+      {confirmDelete && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center'>
+          <Confirm
+            onCancel={() => setConfirmDelete(false)}
+            onConfirm={handleDelete}
+          />
+        </div>
+      )}
     </div>
   );
 };

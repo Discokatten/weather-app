@@ -12,28 +12,31 @@ import {
   updateProfile,
 } from '@/app/data/profilesApi';
 import ImagePlaceholder from '@/app/components/ImagePlaceholder';
+import { Confirm } from '@/app/components/Confirm';
 
 export const EditProfile = ({ profile }: { profile?: Profile }) => {
   const router = useRouter();
 
   const [apiErrors, setApiErrors] = useState<string[]>([]);
   const [message, setMessage] = useState('');
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const userName = capitalize(profile?.name);
 
   const handleDelete = async () => {
-    if (profile?.id)
-      try {
-        await deleteProfile(profile.id);
+    if (!profile?.id) return;
 
-        setMessage('Borttaget!');
-        setTimeout(() => {
-          router.replace('/settings/profile');
-        }, 4000);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    else return;
+    try {
+      await deleteProfile(profile.id);
+
+      setMessage('Borttaget!');
+      setConfirmDelete(false);
+      setTimeout(() => {
+        router.replace('/settings/profile');
+      }, 4000);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const {
@@ -123,12 +126,20 @@ export const EditProfile = ({ profile }: { profile?: Profile }) => {
           <button
             className='rounded-3xl border mt-5  border-red-500 bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-500'
             type='button'
-            onClick={handleDelete}
+            onClick={() => setConfirmDelete(true)}
           >
             Ta bort
           </button>
         )}
       </div>
+      {confirmDelete && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center'>
+          <Confirm
+            onCancel={() => setConfirmDelete(false)}
+            onConfirm={handleDelete}
+          />
+        </div>
+      )}
     </div>
   );
 };
