@@ -28,6 +28,7 @@ export const EditProfile = ({ profile }: { profile?: Profile }) => {
 
     try {
       await deleteProfile(profile.id);
+      setApiErrors([]);
 
       setMessage('Borttaget!');
       setConfirmDelete(false);
@@ -35,6 +36,13 @@ export const EditProfile = ({ profile }: { profile?: Profile }) => {
         router.replace('/settings/profile');
       }, 4000);
     } catch (error) {
+      if (error instanceof ApiError) {
+        setApiErrors(error.errors);
+      } else {
+        setApiErrors([
+          'Något gick fel när användaren skulle tas bort, försök igen',
+        ]);
+      }
       console.error('Error:', error);
     }
   };
