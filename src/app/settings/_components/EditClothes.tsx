@@ -25,6 +25,7 @@ export const EditClothes = ({ item }: { item?: Clothes }) => {
 
   const handleDelete = async () => {
     if (!item?.id) return;
+    setApiErrors([]);
 
     try {
       await deleteClothes(item.id);
@@ -35,6 +36,13 @@ export const EditClothes = ({ item }: { item?: Clothes }) => {
         router.replace('/settings');
       }, 4000);
     } catch (error) {
+      if (error instanceof ApiError) {
+        setApiErrors(error.errors);
+      } else {
+        setApiErrors([
+          'Något gick fel när plagget skulle tas bort, försök igen',
+        ]);
+      }
       console.error('Error:', error);
     }
   };
